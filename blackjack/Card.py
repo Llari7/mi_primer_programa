@@ -4,4 +4,4 @@ class Card:
         self.suit = suit
 
     def __str__(self):
-        return "{} - {}; ".format(self.number, self.suit)
+        return "{} - {}".format(self.number, self.suit)
