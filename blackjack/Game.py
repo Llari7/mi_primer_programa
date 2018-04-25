@@ -33,33 +33,44 @@ class Game:
         total = 0
         for card in self.table_cards:
             if card.number == 1 and total + self.card_values[card.number] > 21:
-                total + 1
+                total += 1
             else:
                 total += self.card_values[card.number]
         return total
 
-    def player_wants_to_continue(self):
-        response = input("Quieres otra carta? (Y/N)")
-        return response == "Y"
+    @staticmethod
+    def ask_yes_no(question):
+        response = input("{} (Y/N)".format(question))
+        return response.upper() == "Y"
 
     def run(self):
-        user_continue = True
-        while user_continue and self.count_table_cards() < 21:
-            self.draft_card()
-            user_continue = self.player_wants_to_continue()
 
-        score = self.count_table_cards()
-        print("Tu puntuación es de {}".format(score))
+        new_player = True
+        while new_player:
+            player_name = input("Cual es el nombre del nuevo jugador?")
+            self.players.append(Player(player_name))
+            new_player = self.ask_yes_no("Quieres añadir a otro jugador?")
+        for player in self.players:
+            user_continue = True
+            print("Turno del jugador {}.".format(player.name))
+            while user_continue and self.count_table_cards() < 21:
+                self.draft_card()
+                user_continue = self.ask_yes_no("Quieres otra carta?")
 
-        if score() > 21:
-            print("Has perdido")
+            score = self.count_table_cards()
+            player.points = score
+            print("{} tu puntuación es de {} puntos.".format(player.name, score))
+            self.table_cards.clear()
 
     def start_turn(self):
         pass
 
     def select_winner(self):
-        pass
+        self.players.sort(key=lambda player: player.points, reverse=True)
+        print("El ganador es {} con {} puntos!!".format(self.players[0].name, self.players[0].points))
+
 
 if __name__ == '__main__':
     blackjack = Game()
     blackjack.run()
+    blackjack.select_winner()

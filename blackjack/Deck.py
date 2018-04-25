@@ -14,8 +14,8 @@ class Deck:
                 self.cards.append(Card(number, suit))
 
     def give_random_card(self):
-        """pos = randint(0, len(self.cards))
-        return self.cards.pop(pos)"""
+        pos = randint(0, len(self.cards))
+        return self.cards.pop(pos)
         pass
 
     def __str__(self):
